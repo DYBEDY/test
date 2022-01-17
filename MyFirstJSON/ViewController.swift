@@ -17,7 +17,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         getJson()
-        
+        getPicture()
         
     }
 
@@ -31,8 +31,8 @@ class ViewController: UIViewController {
             }
             
             do {
-                let wiki = try JSONDecoder().decode(DogsAPI.self, from: data)
-                print(wiki)
+                self.dog = try JSONDecoder().decode(DogsAPI.self, from: data)
+                print(self.dog ?? "")
             } catch {
                 print(error.localizedDescription)
             }
@@ -41,9 +41,10 @@ class ViewController: UIViewController {
     }
     
     func getPicture() {
-            guard let url = URL(string: dog.message ?? "") else { return }
+
+        guard let url = URL(string: dog.message ?? "") else { return }
             guard let imageData = try? Data(contentsOf: url) else { return }
-            
+
             DispatchQueue.main.async {
                 self.newImage.image = UIImage(data: imageData)
             }
