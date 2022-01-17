@@ -13,14 +13,14 @@ class ViewController: UIViewController {
     
     var dog: DogsAPI!
     
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         getJson()
-        getPicture()
+        
         
     }
-
+    
     func getJson() {
         guard let url = URL(string: "https://dog.ceo/api/breeds/image/random") else { return }
         
@@ -32,28 +32,21 @@ class ViewController: UIViewController {
             
             do {
                 self.dog = try JSONDecoder().decode(DogsAPI.self, from: data)
-                print(self.dog ?? "")
+                print(self.dog.message ?? "")
             } catch {
                 print(error.localizedDescription)
             }
+            
+            DispatchQueue.global().async {
+                guard let url = URL(string: self.dog.message ?? "") else { return }
+                guard let imageData = try? Data(contentsOf: url) else { return }
                 
+                DispatchQueue.main.async {
+                    self.newImage.image = UIImage(data: imageData)
+                }
+                
+            }
         } .resume()
     }
     
-    func getPicture() {
-
-        guard let url = URL(string: dog.message ?? "") else { return }
-            guard let imageData = try? Data(contentsOf: url) else { return }
-
-            DispatchQueue.main.async {
-                self.newImage.image = UIImage(data: imageData)
-            }
-    }
-    
-    }
-
-    
-    
-    
-
-
+}
