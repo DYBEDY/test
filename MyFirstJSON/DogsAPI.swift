@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 struct DogsAPI: Decodable {
-    let message: String
-    let status: String
+    let message: String?
+    let status: String?
     
 }

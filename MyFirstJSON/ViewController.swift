@@ -11,11 +11,13 @@ class ViewController: UIViewController {
     
     @IBOutlet var newImage: UIImageView!
     
+    var dog: DogsAPI!
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
         getJson()
+        
         
     }
 
@@ -34,11 +36,23 @@ class ViewController: UIViewController {
             } catch {
                 print(error.localizedDescription)
             }
-            guard let image = UIImage(data: data) else { return }
-            self.newImage.image = image
-            
-           
+                
         } .resume()
     }
-}
+    
+    func getPicture() {
+            guard let url = URL(string: dog.message ?? "") else { return }
+            guard let imageData = try? Data(contentsOf: url) else { return }
+            
+            DispatchQueue.main.async {
+                self.newImage.image = UIImage(data: imageData)
+            }
+    }
+    
+    }
+
+    
+    
+    
+
 
